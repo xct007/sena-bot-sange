@@ -105,5 +105,5 @@ dist
 
 # Others
 *store.json
-session
+sessions
 yarn.lock
