@@ -1,39 +1,39 @@
 {
-  "name": "sena-bot-sange",
-  "version": "1.0.0",
-  "description": "WhatsApp BOT SBS",
-  "main": "index.js",
-  "scripts": {
-    "start": "node ."
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/xct007/sena-bot-sange.git"
-  },
-  "author": "FrierenDv",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/xct007/sena-bot-sange/issues"
-  },
-  "homepage": "https://github.com/xct007/sena-bot-sange#readme",
-  "dependencies": {
-    "@adiwajshing/baileys": "^5.0.0",
-    "@adiwajshing/keyed-db": "^0.2.4",
-    "axios": "^1.3.2",
-    "cfonts": "^3.1.1",
-    "chalk": "4.1.2",
-    "cluster": "^0.7.7",
-    "fs": "^0.0.1-security",
-    "got": "^12.5.3",
-    "lodash": "^4.17.21",
-    "lowdb": "^5.1.0",
-    "mongoose": "^6.9.0",
-    "path": "^0.12.7",
-    "qrcode-terminal": "^0.12.0",
-    "syntax-error": "^1.4.0",
-    "translate-google": "^1.5.0"
-  },
-  "devDependencies": {
-    "link-preview-js": "^3.0.4"
-  }
+	"name": "sena-bot-sange",
+	"version": "1.0.0",
+	"description": "WhatsApp BOT SBS",
+	"main": "index.js",
+	"scripts": {
+		"start": "node ."
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/xct007/sena-bot-sange.git"
+	},
+	"author": "FrierenDv",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/xct007/sena-bot-sange/issues"
+	},
+	"homepage": "https://github.com/xct007/sena-bot-sange#readme",
+	"dependencies": {
+		"@adiwajshing/baileys": "^5.0.0",
+		"@adiwajshing/keyed-db": "^0.2.4",
+		"axios": "^1.3.2",
+		"cfonts": "^3.1.1",
+		"chalk": "4.1.2",
+		"cluster": "^0.7.7",
+		"fs": "^0.0.1-security",
+		"got": "^12.5.3",
+		"lodash": "^4.17.21",
+		"lowdb": "^5.1.0",
+		"mongoose": "^6.9.0",
+		"path": "^0.12.7",
+		"qrcode-terminal": "^0.12.0",
+		"syntax-error": "^1.4.0",
+		"translate-google": "^1.5.0"
+	},
+	"devDependencies": {
+		"link-preview-js": "^3.0.4"
+	}
 }
