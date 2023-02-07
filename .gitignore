@@ -107,3 +107,4 @@ dist
 *store.json
 sessions
 yarn.lock
+database.json
