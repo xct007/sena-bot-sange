@@ -1,7 +1,7 @@
 /** bring this code from https://github.com/Nurutomo/wabot-aq/blob/master/main.js */
 /** and code from games-wabot */
 
-const fs = require("fs");
+const { watchFile, unwatchFile } = require("fs");
 const chalk = require("chalk");
 const axios = require("axios");
 const { format } = require("util");
@@ -31,7 +31,7 @@ module.exports = handler = async (sock, m) => {
 	try {
 		m.exp = 0;
 		m.limit = false;
-		/** Its Probably the correct way to insert data using loop @see @link {./lib/structure.js} */
+		/** Its Probably the correct way to insert data using loop @link {./lib/structure.js} */
 		structure(sock, m);
 
 		let { body } = m;
@@ -210,11 +210,10 @@ module.exports = handler = async (sock, m) => {
 					console.log(e);
 					if (e) {
 						let text = format(e.message ? e.message : e);
-						/*
+						/** @note not realy need it right now.
 						for (const key of Object.values(APIKeys)) {
 							text = text.replace(new RegExp(key, "g"), "#HIDEN#")
 						}
-						*/
 						for (const [jid] of owner.filter(
 							([number, _, isDeveloper]) => isDeveloper && number
 						)) {
@@ -235,7 +234,8 @@ module.exports = handler = async (sock, m) => {
 								);
 							}
 						}
-						// m.reply(String(text));
+						*/
+						console.log(text);
 					}
 				} finally {
 					if (typeof plugin.after === "function") {
@@ -293,13 +293,14 @@ module.exports = handler = async (sock, m) => {
 					stat.lastSuccess = now;
 				}
 			}
-			console.log(m);
+			// console.log(m);
 		}
 	}
 };
-let file = require.resolve(__filename);
-fs.watchFile(file, () => {
-	fs.unwatchFile(file);
+
+const file = require.resolve(__filename);
+watchFile(file, () => {
+	unwatchFile(file);
 	console.log(chalk.green("[UPDATED]", chalk.white(__filename)));
 	delete require.cache[file];
 	require(file);
