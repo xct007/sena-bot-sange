@@ -1,55 +1,87 @@
 const axios = require("axios");
 const { database: db } = require("../lib/database.js");
 
-// TODO: move the conversation to database and delete it after one day.
-// TODO: can we make this code more simple and readble ?
+const defaults_ = {
+	// Same as openai API turbo
+	// you can set role for OpenAI
+	// for more information you can visit official opanai docs
+	system: "You are help AI assistant, your name is sena.",
+	// your openai apikey
+	apikey: "sk-YOUR-APIKEY",
+	// max_tokens
+	max_tokens: 500,
+	// model
+	model: "gpt-3.5-turbo"
+}
+const createRequest = async(messages) => {
+	const { data } = await axios.request({
+		baseURL: "https://api.openapi.com",
+		url: "/v1/chat/completions",
+		headers: {
+			["Authorization"]: "Bearer " + defaults_["apikey"],
+			["Content-Type"]: "application/json"
+		},
+		data: {
+			max_tokens: defaults_["max_tokens"],
+			model: defaults_["model"],
+			// this is a chat conversation
+			messages
+		}
+	}).catch((e) => e === null || e === void 0 ? void 0 : e.response);
+	if (data.error) {
+		return {
+			error: true,
+		}
+	}
+	return {
+		messages: {
+			role: "assistant",
+			content: data.choices[0]["message"]["content"]
+		}
+	}
+}
+
 let handler = async (m, { conn, isAdmin, isGroup, isOwner, mess, text }) => {
 	conn.openai = conn.openai ? conn.openai : {};
 	if (!text) {
 		return m.reply("No text.");
 	}
+	/**
+	 * @warning HIGH-MEMORY-USAGE for large chat
+	 * create stored variable in memory
+	 * stored chat conversation in memory.
+	 */
+	conn.waitInQueue = conn.waitInQueu ? conn.waitInQueu : {}
 	conn.openai[m.sender] = conn.openai[m.sender]
 		? conn.openai[m.sender]
-		: { prompt: "", context: { YOU: "", AI: "" } };
-	let user = conn.openai[m.sender];
-	if (!user.context.YOU || !user.context.YOU.length) {
-		Object.assign(user.context, {
-			YOU: text,
-		});
-	}
-	let prompt = "";
-	Object.entries(user.context).forEach(([key, value]) => {
-		prompt += `${key}: ${value}\n`;
-	});
-	const { data: response } = await axios
-		.get("https://api.itsrose.my.id/chatGPT/free", {
-			params: {
-				prompt: user.prompt ? user.prompt + prompt : prompt,
-			},
+		: [
+			{
+				role: "system",
+				content: defaults_["system"]
+			}
+		];
+	const storedChat = conn.openai[m.sender]
+	const { error, messages } = await createRequest([
+		...storedChat,
+		{
+			role: "user",
+			content: text
+		}
+	]);
+	if (error) {
+		// delete stored chat if API error to avoid unnecesary BUG;
+		delete conn.openai[m.sender]
+	} else {
+		// push AI response to stored data;
+		storedChat.push({
+			role: "user",
+			content: text
+		},
+		{
+			...messages
 		})
-		.catch((e) => (e === null || e === void 0 ? void 0 : e.response));
-	if (!response.status || !response.message) {
-		return m.reply("Request to api fail");
 	}
-	m.reply(response.message);
-	Object.assign(user, {
-		context: {
-			YOU: text,
-			AI: response.message,
-		},
-	});
-	let _prompt = "";
-	Object.entries(user.context).forEach(([key, value]) => {
-		_prompt += `${key}: ${value}\n`;
-	});
-
-	Object.assign(user, {
-		prompt: user.prompt + _prompt,
-		context: {
-			YOU: "",
-			AI: "",
-		},
-	});
+	m.reply(messages["content"])
 };
 handler.command = ["ai", "openai", "rose"];
 module.exports = handler;

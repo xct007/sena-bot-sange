@@ -11,7 +11,7 @@ module.exports = {
 		["6282177862043", "David", true],
 		["621230498560", "Syntia", false],
 	],
-	wm: "Powered by https://itsrose.my.id",
+	wm: "Powered by https://itsrose.site",
 	languages: async (code) =>
 		new Promise(async (resolve) => {
 			// default language is english
